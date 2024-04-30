@@ -4,14 +4,12 @@ import './App.css'
 
 function App() {
   const [posts, setPosts] = useState([])
-//  const [total, setTotal] = useState(parseInt(history.state.total) > 0 ? parseInt(history.state.total) : 0)
 
   useEffect(() => {
     const getPosts = async (url) => {
       await fetch(url)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           data.posts.map((post) => {
             setPosts(posts => [...posts, {
               id: post._id,
