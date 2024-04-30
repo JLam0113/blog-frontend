@@ -26,6 +26,10 @@ function Posts({ id, title, content, date }) {
         setShowComments(showComments == false ? true : false)
       }
 
+      // TODO
+      // Create comment under post
+      // Manually add comment to array to force component rerender
+      // Need to ensure API returns ID after created
     return <>
         <li className="card"
             id={id} >
@@ -43,7 +47,6 @@ function Posts({ id, title, content, date }) {
                 ))}
             </ol>}
             <button onClick={clickHandler}>{showComments == false ? 'Show comments' : 'Hide comments'}</button>
-
         </li>
     </>
 }
