@@ -1,33 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect, useState } from 'react'
+import Posts from './components/posts'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [posts, setPosts] = useState([])
+//  const [total, setTotal] = useState(parseInt(history.state.total) > 0 ? parseInt(history.state.total) : 0)
+
+  useEffect(() => {
+    const getPosts = async (url) => {
+      await fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          data.posts.map((post) => {
+            setPosts(posts => [...posts, {
+              id: post._id,
+              title: post.title,
+              content: post.content,
+              date: post.date
+            }])
+          })
+        })
+    }
+    getPosts('http://localhost:3000/')
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <ol className="postsContainer">
+        {posts.map(element => (
+          <Posts title={element.title}
+            content={element.content}
+            id={element.id}
+            date={element.date}
+            key={element.id}/>
+        ))}
+      </ol>
     </>
   )
 }
