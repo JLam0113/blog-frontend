@@ -22,6 +22,7 @@ function Form() {
                 console.log(data);
                 // note using deconstructuring is better for cleaner code
                 localStorage.setItem("accessToken", data.token);
+                window.location.reload();
             });
     }
 
