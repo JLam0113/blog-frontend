@@ -5,9 +5,11 @@ function Posts({ id, title, content, date }) {
     const [comments, setComments] = useState([])
     const [showComments, setShowComments] = useState(false)
 
-    useEffect(() => {
-        const fetchComments = async (url) => {
-            await fetch(url)
+    const clickHandler = async () => {
+        setShowComments(showComments == false ? true : false)
+        setComments([]);
+        try {
+            await fetch(`http://localhost:3000/post/${id}`)
                 .then((response) => response.json())
                 .then((data) => {
                     data.posts.map((comment) => {
@@ -18,18 +20,15 @@ function Posts({ id, title, content, date }) {
                         }])
                     })
                 })
+        } catch (err) {
+            console.log(err.message)
         }
-        fetchComments('http://localhost:3000/post/' + id)
-      }, []);
+    }
 
-      const clickHandler = () => {
-        setShowComments(showComments == false ? true : false)
-      }
-
-      // TODO
-      // Create comment under post
-      // Manually add comment to array to force component rerender
-      // Need to ensure API returns ID after created
+    // TODO
+    // Create comment under post
+    // Manually add comment to array to force component rerender
+    // Need to ensure API returns ID after created
     return <>
         <li className="card"
             id={id} >
@@ -40,10 +39,11 @@ function Posts({ id, title, content, date }) {
             <br></br>
             {showComments == false ? '' : <ol className="commentsContainer">
                 {comments.map(element => (
-                    <Comments key={element.id}
+                    <Comments
                         content={element.content}
                         id={element.id}
-                        date={element.date} />
+                        date={element.date}
+                        key={element.id} />
                 ))}
             </ol>}
             <button onClick={clickHandler}>{showComments == false ? 'Show comments' : 'Hide comments'}</button>
